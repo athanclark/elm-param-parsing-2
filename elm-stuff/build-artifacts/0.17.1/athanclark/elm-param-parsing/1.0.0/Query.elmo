@@ -1,0 +1,82 @@
+var _athanclark$elm_param_parsing$Query$printQuery = function (xs) {
+	var _p0 = xs;
+	if (_p0.ctor === '[]') {
+		return '';
+	} else {
+		var fromKV = function (_p1) {
+			var _p2 = _p1;
+			var _p4 = _p2._0;
+			var _p3 = _p2._1;
+			if (_p3.ctor === 'Nothing') {
+				return _p4;
+			} else {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_p4,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'=',
+						_evancz$elm_http$Http$uriEncode(_p3._0)));
+			}
+		};
+		var go = F2(
+			function (kMv, s) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					fromKV(kMv),
+					A2(_elm_lang$core$Basics_ops['++'], '&', s));
+			});
+		return A2(
+			_elm_lang$core$Basics_ops['++'],
+			'?',
+			A3(
+				_elm_lang$core$List$foldr,
+				go,
+				'',
+				A2(_elm_lang$core$List_ops['::'], _p0._0, _p0._1)));
+	}
+};
+var _athanclark$elm_param_parsing$Query$parseQuery = function (q) {
+	var _p5 = _elm_lang$core$String$uncons(q);
+	if (_p5.ctor === 'Nothing') {
+		return _elm_lang$core$Native_List.fromArray(
+			[]);
+	} else {
+		if (!_elm_lang$core$Native_Utils.eq(
+			_p5._0._0,
+			_elm_lang$core$Native_Utils.chr('?'))) {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
+		} else {
+			var getKV = function (s) {
+				var _p6 = A2(_elm_lang$core$String$split, '=', s);
+				if (_p6.ctor === '[]') {
+					return {ctor: '_Tuple2', _0: '', _1: _elm_lang$core$Maybe$Nothing};
+				} else {
+					if (_p6._1.ctor === '[]') {
+						return {
+							ctor: '_Tuple2',
+							_0: _evancz$elm_http$Http$uriDecode(_p6._0),
+							_1: _elm_lang$core$Maybe$Nothing
+						};
+					} else {
+						return {
+							ctor: '_Tuple2',
+							_0: _evancz$elm_http$Http$uriDecode(_p6._0),
+							_1: _elm_lang$core$Maybe$Just(
+								_elm_lang$core$String$concat(
+									A2(
+										_elm_lang$core$List$intersperse,
+										'=',
+										A2(_elm_lang$core$List$map, _evancz$elm_http$Http$uriDecode, _p6._1))))
+						};
+					}
+				}
+			};
+			return A2(
+				_elm_lang$core$List$map,
+				getKV,
+				A2(_elm_lang$core$String$split, '&', _p5._0._1));
+		}
+	}
+};
