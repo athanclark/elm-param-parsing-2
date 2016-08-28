@@ -40,7 +40,7 @@ and likewise, forall query string sets `xs:[(String, Maybe String)]`:
 parseQuery (printQuery xs) == xs
 ```
 
-> I think that's the only real important law.
+> If you can think of others, please let me know!
 
 @docs parseQuery, printQuery
 -}
@@ -74,7 +74,7 @@ parseQuery q =
                              , Nothing
                              )
                 (k :: vs) -> ( Http.uriDecode k
-                             , Just <| String.concat
+                             , Just <| String.concat -- FIXME
                                     <| List.intersperse "="
                                     <| List.map Http.uriDecode vs
                              )
@@ -94,8 +94,7 @@ printQuery xs =
       let fromKV : (String, Maybe String) -> String
           fromKV (k,mV) =
             case mV of
-              Nothing -> k
-              Just v  -> k ++ "=" ++ Http.uriEncode v
-          go : (String, Maybe String) -> String -> String
-          go kMv s = fromKV kMv ++ "&" ++ s
-      in  "?" ++ List.foldr go "" (kMv :: kMvs)
+              Nothing -> Http.uriEncode k
+              Just v  -> Http.uriEncode k ++ "=" ++ Http.uriEncode v
+          go = String.concat << List.intersperse "&" << List.map fromKV
+      in  "?" ++ go (kMv :: kMvs)
