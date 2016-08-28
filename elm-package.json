@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "Alternative to elm-param-parsing",
-    "repository": "https://github.com/athanclark/elm-param-parsing.git",
+    "repository": "https://github.com/athanclark/elm-param-parsing-2.git",
     "license": "BSD3",
     "source-directories": [
         "src"
